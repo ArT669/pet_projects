@@ -59,6 +59,9 @@
 
 ![Figure_1](https://github.com/ArT669/pet_projects/assets/120614279/640f29d9-c589-4268-a14e-2a41a50d004b)
 
+![Figure_2](https://github.com/ArT669/pet_projects/assets/120614279/eae84353-ae7e-4ba1-a219-de42388e4146)
+
+
 В процессе находится написание кода, которое позволит наблюдать процесс заражения в виде гифки.
 
 
