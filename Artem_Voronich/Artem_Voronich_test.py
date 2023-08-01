@@ -1,7 +1,10 @@
 from datetime import datetime, time
 from prettytable import PrettyTable
 import json
-
+"""
+Артем Воронич 
+https://novosibirsk.hh.ru/resume/9c62d305ff0beeb1580039ed1f6b4950534c4f
+"""
 def get_result(data, number):
 
 	result = data[number]
