@@ -16,7 +16,6 @@ import pygame
 2. обновление игры
 3. рендеринг (прорисовка)
 """
-#напишу тут
 
 from settings import Settings 
 from ship import Ship
