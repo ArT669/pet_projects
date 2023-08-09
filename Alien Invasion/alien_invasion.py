@@ -1,4 +1,4 @@
-# страница 275
+
 import sys
 from time import sleep
 
