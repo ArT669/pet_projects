@@ -23,6 +23,7 @@ from bullet import Bullet
 from alien import Alien
 from game_stats import GameStats
 from button import Button
+from level import Level
 
 class AlienInvasion():
 	
@@ -51,7 +52,10 @@ class AlienInvasion():
 
 		#Создание кнопки Play
 		self.play_button = Button(self, 'Play')
-		
+
+		self.easy_level_button = Level(self, 'Easy')
+		self.middle_level_button = Level(self, 'Middle')
+		self.hard_level_button = Level(self, 'Hard')
 
 	def run_game(self):
 		"""Запуск основного цикла игры"""
@@ -83,12 +87,38 @@ class AlienInvasion():
 
 				elif event.type == pygame.MOUSEBUTTONDOWN:
 					mouse_pos = pygame.mouse.get_pos()
-					self._check_play_button(mouse_pos)
+					self._check_level_button(mouse_pos)
+
+					#mouse_pos = pygame.mouse.get_pos()
+					#self._check_play_button(mouse_pos)
 
 	def _check_play_button(self, mouse_pos):
 		"""Запускает новую игру при нажатии кнопки Play"""
 		if self.play_button.rect.collidepoint(mouse_pos):
-			self.stats.game_active = True
+			button_clicked = self.play_button.rect.collidepoint(mouse_pos)
+			if button_clicked and not self.stats.game_active:
+				# Сброс игровой статистики
+				self.settings.initialize_dynamic_settings()
+				self.stats.reset_stats()
+				self.stats.game_active = True
+
+				# Очистка пришельцев и пуль
+				self.aliens.empty()
+				self.bullets.empty()
+
+				#Создание нового флота
+				self._create_fleet()
+				self.ship.center_ship()
+
+				# Скрываем указатель
+				pygame.mouse.set_visible(False)
+
+	def _check_level_button(self, mouse_pos):
+
+		if self.middle_level_button.rect.collidepoint(mouse_pos):
+			level_button_clicked = self.middle_level_button.rect.collidepoint(mouse_pos)
+			if level_button_clicked and not self.stats.game_active:
+				self._check_play_button(mouse_pos)
 
 	def _check_keydown_events(self, event):
 		"""Реакция на нажатие клавиш"""
@@ -195,7 +225,9 @@ class AlienInvasion():
 
 		#Кнопка Play отображается в том случае, если игра неактивна
 		if not self.stats.game_active:
-			self.play_button.draw_button()
+			#self.play_button.draw_button()
+
+			self.middle_level_button.draw_button()
 
 		# Отображение последнего отрисованного экрана
 		pygame.display.flip()
@@ -226,6 +258,7 @@ class AlienInvasion():
 			"""ЛУТБОКСЫ ЗДЕСЬ"""
 
 			self._create_fleet()
+			self.settings.increase_speed()
 
 	def _ship_hit(self):
 		"""Обрабатывает столкновение корабля с пришельцем"""
@@ -246,6 +279,7 @@ class AlienInvasion():
 
 		else:
 			self.stats.game_active = False
+			pygame.mouse.set_visible(True)
 
 	def _check_aliens_bottom(self):
 		"""Проверяет, добрались ли пришельцы до нижнего края экрана"""
