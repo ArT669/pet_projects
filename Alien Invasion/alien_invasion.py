@@ -1,4 +1,4 @@
-
+# рабочая версия
 import sys
 from time import sleep
 
@@ -51,11 +51,12 @@ class AlienInvasion():
 		self.bg_color = self.settings.bg_color
 
 		#Создание кнопки Play
-		self.play_button = Button(self, 'Play')
+		self.play_button = Button(self, 'Play', 'green')
 
-		self.easy_level_button = Level(self, 'Easy')
-		self.middle_level_button = Level(self, 'Middle')
-		self.hard_level_button = Level(self, 'Hard')
+		#Создание кнопок меню
+		self.easy_level_button = Button(self, 'Easy', 'green')
+		self.middle_level_button = Button(self, 'Middle', 'orange')
+		self.hard_level_button = Button(self, 'Hard', 'red')
 
 	def run_game(self):
 		"""Запуск основного цикла игры"""
@@ -86,11 +87,9 @@ class AlienInvasion():
 					self._check_keyup_events(event)
 
 				elif event.type == pygame.MOUSEBUTTONDOWN:
-					mouse_pos = pygame.mouse.get_pos()
-					self._check_level_button(mouse_pos)
+					mouse_pos = pygame.mouse.get_pos()				
+					self._check_play_button(mouse_pos)
 
-					#mouse_pos = pygame.mouse.get_pos()
-					#self._check_play_button(mouse_pos)
 
 	def _check_play_button(self, mouse_pos):
 		"""Запускает новую игру при нажатии кнопки Play"""
@@ -112,13 +111,6 @@ class AlienInvasion():
 
 				# Скрываем указатель
 				pygame.mouse.set_visible(False)
-
-	def _check_level_button(self, mouse_pos):
-
-		if self.middle_level_button.rect.collidepoint(mouse_pos):
-			level_button_clicked = self.middle_level_button.rect.collidepoint(mouse_pos)
-			if level_button_clicked and not self.stats.game_active:
-				self._check_play_button(mouse_pos)
 
 	def _check_keydown_events(self, event):
 		"""Реакция на нажатие клавиш"""
@@ -227,7 +219,7 @@ class AlienInvasion():
 		if not self.stats.game_active:
 			#self.play_button.draw_button()
 
-			self.middle_level_button.draw_button()
+			self.play_button.draw_button()
 
 		# Отображение последнего отрисованного экрана
 		pygame.display.flip()
