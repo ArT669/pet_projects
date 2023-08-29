@@ -30,6 +30,3 @@ class Bullet(Sprite):
 	def draw_bullet(self):
 		#рисую четырехугольник на экране заданного цвета и размера
 		pygame.draw.rect(self.screen, self.color, self.rect)
-
-
-

@@ -1,4 +1,4 @@
-# рабочая версия
+
 import sys
 from time import sleep
 
@@ -23,7 +23,6 @@ from bullet import Bullet
 from alien import Alien
 from game_stats import GameStats
 from button import Button
-from level import Level
 
 class AlienInvasion():
 	
@@ -52,11 +51,6 @@ class AlienInvasion():
 
 		#Создание кнопки Play
 		self.play_button = Button(self, 'Play', 'green')
-
-		#Создание кнопок меню
-		self.easy_level_button = Button(self, 'Easy', 'green')
-		self.middle_level_button = Button(self, 'Middle', 'orange')
-		self.hard_level_button = Button(self, 'Hard', 'red')
 
 	def run_game(self):
 		"""Запуск основного цикла игры"""
@@ -89,7 +83,6 @@ class AlienInvasion():
 				elif event.type == pygame.MOUSEBUTTONDOWN:
 					mouse_pos = pygame.mouse.get_pos()				
 					self._check_play_button(mouse_pos)
-
 
 	def _check_play_button(self, mouse_pos):
 		"""Запускает новую игру при нажатии кнопки Play"""
@@ -231,7 +224,6 @@ class AlienInvasion():
 		for bullet in self.bullets.copy():
 			if bullet.rect.bottom <= 0:
 				self.bullets.remove(bullet)
-
 		
 		self._check_bullet_alien_collisions()
 		
@@ -247,10 +239,11 @@ class AlienInvasion():
 			#Уничтожение существующих снарядов и создание нового флота
 			self.bullets.empty() #существующие снаряды убираются
 
-			"""ЛУТБОКСЫ ЗДЕСЬ"""
+			#loot boxes
 
 			self._create_fleet()
 			self.settings.increase_speed()
+
 
 	def _ship_hit(self):
 		"""Обрабатывает столкновение корабля с пришельцем"""
@@ -280,7 +273,6 @@ class AlienInvasion():
 			if alien.rect.bottom >= screen_rect.bottom:
 				# Происходит то же, что при столкновении с кораблем
 				self._ship_hit()
-			
 
 	def _update_aliens(self):
 		"""Обновляет позиции всех пришельцев во флоте 
@@ -299,7 +291,3 @@ if __name__ == '__main__':
 	# Создание экземпляра и запуск игры
 	ai = AlienInvasion()
 	ai.run_game()
-
-
-
-
