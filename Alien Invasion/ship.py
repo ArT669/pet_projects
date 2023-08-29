@@ -1,10 +1,12 @@
 import pygame
+from pygame.sprite import Sprite
 
-class Ship():
+class Ship(Sprite):
 	"""Класс для управления кораблем"""
 
 	def __init__(self, ai_game):
 		"""Задает начальную позицию"""
+		super().__init__()
 
 		self.screen = ai_game.screen
 		self.settings = ai_game.settings

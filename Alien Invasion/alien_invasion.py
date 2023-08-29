@@ -23,6 +23,7 @@ from bullet import Bullet
 from alien import Alien
 from game_stats import GameStats
 from button import Button
+from scoreboard import Scoreboard
 
 class AlienInvasion():
 	
@@ -38,6 +39,7 @@ class AlienInvasion():
 
 		#Создание экземпляра для хранение игровой статистики
 		self.stats = GameStats(self)
+		self.sb = Scoreboard(self)
 
 		#корабль
 		self.ship = Ship(self)
@@ -66,12 +68,13 @@ class AlienInvasion():
 			self._update_screen()
 
 	"""разделяем run_game на вспомогательные методы [рефакторинг]"""
-
 	def _check_events(self):
 		# Отслеживание внешних событий: клавиатура и мышка
 		for event in pygame.event.get():
 				"""event.get() даёт список событий с последнего вызова этой функции"""
 				if event.type == pygame.QUIT:
+					with open('records.txt', 'w+', encoding = 'utf-8') as f:
+						print(self.stats.high_score, file=f)
 					sys.exit()
 
 				elif event.type == pygame.KEYDOWN:
@@ -93,6 +96,9 @@ class AlienInvasion():
 				self.settings.initialize_dynamic_settings()
 				self.stats.reset_stats()
 				self.stats.game_active = True
+				self.sb.prep_score()
+				self.sb.prep_level()
+				self.sb.prep_ships()
 
 				# Очистка пришельцев и пуль
 				self.aliens.empty()
@@ -128,6 +134,8 @@ class AlienInvasion():
 			self._fire_bullet()
 
 		elif event.key == pygame.K_q:
+			with open('records.txt', 'w+', encoding = 'utf-8') as f:
+				print(self.stats.high_score, file=f)
 			sys.exit()
 
 	def _check_keyup_events(self, event):
@@ -208,6 +216,8 @@ class AlienInvasion():
 
 		self.aliens.draw(self.screen)
 
+		self.sb.show_score()
+
 		#Кнопка Play отображается в том случае, если игра неактивна
 		if not self.stats.game_active:
 			#self.play_button.draw_button()
@@ -235,6 +245,13 @@ class AlienInvasion():
 			self.bullets, self.aliens, True, True)
 		"""ключ значение тру1 это удаление снаряда, 
 		тру2 это удаление пришельцев"""
+
+		if collisions:
+			for aliens in collisions.values():
+				self.stats.score += self.settings.alien_points * len(aliens)
+			self.sb.prep_score()
+			self.sb.check_high_score()
+
 		if not self.aliens:
 			#Уничтожение существующих снарядов и создание нового флота
 			self.bullets.empty() #существующие снаряды убираются
@@ -244,12 +261,16 @@ class AlienInvasion():
 			self._create_fleet()
 			self.settings.increase_speed()
 
+			#увеличение уровня
+			self.stats.level += 1
+			self.sb.prep_level()
 
 	def _ship_hit(self):
 		"""Обрабатывает столкновение корабля с пришельцем"""
 		# Уменьшение _ship_left
 		if self.stats.ships_left > 0:
 			self.stats.ships_left -= 1
+			self.sb.prep_ships()
 
 			# Очистка списков пришельцев и снарядов
 			self.aliens.empty()
