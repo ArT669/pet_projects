@@ -4,6 +4,8 @@
 
 ![](https://img.shields.io/badge/random-grey?style=flat-square) ![](https://img.shields.io/badge/matplotlib-blue?style=flat-square&logo=matplotlib) ![](https://img.shields.io/badge/numpy-grey?style=flat-square&logo=numpy&logoColor=white)
 
+Вдохновлялся [этим симулятором](https://tachyondecay.github.io/epidemic-simulator/)
+
 Написан клеточный автомат с модификацией для распространения вируса: создается некоторое количество агентов, которые могут ходить по миру, заражать других и болеть в разных стадиях, умирать.
 
 Входной файл (data.txt) описывает основные характеристики всех групп агентов(людей).
