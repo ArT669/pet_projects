@@ -37,21 +37,22 @@ class AlienInvasion():
 		self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
 		pygame.display.set_caption("Alien Invasion")
 
-		#Создание экземпляра для хранение игровой статистики
+		# Создание экземпляра для хранение игровой статистики
 		self.stats = GameStats(self)
 		self.sb = Scoreboard(self)
 
-		#корабль
+		# Создание экземпляра корабля, спрайтов пулей и пришельцев как пустых
 		self.ship = Ship(self)
-		#пули
 		self.bullets = pygame.sprite.Group()
 		self.aliens = pygame.sprite.Group()
 
+		# Создание флота 
 		self._create_fleet()
-		#назначение цвета фона
+
+		# Назначение цвета фона
 		self.bg_color = self.settings.bg_color
 
-		#Создание кнопки Play
+		# Создание кнопки Play
 		self.play_button = Button(self, 'Play', 'green')
 
 	def run_game(self):
@@ -67,11 +68,13 @@ class AlienInvasion():
 
 			self._update_screen()
 
-	"""разделяем run_game на вспомогательные методы [рефакторинг]"""
 	def _check_events(self):
 		# Отслеживание внешних событий: клавиатура и мышка
 		for event in pygame.event.get():
+
 				"""event.get() даёт список событий с последнего вызова этой функции"""
+
+				# Запись рекорда в файл
 				if event.type == pygame.QUIT:
 					with open('records.txt', 'w+', encoding = 'utf-8') as f:
 						print(self.stats.high_score, file=f)
@@ -104,7 +107,7 @@ class AlienInvasion():
 				self.aliens.empty()
 				self.bullets.empty()
 
-				#Создание нового флота
+				# Создание нового флота
 				self._create_fleet()
 				self.ship.center_ship()
 
@@ -114,7 +117,7 @@ class AlienInvasion():
 	def _check_keydown_events(self, event):
 		"""Реакция на нажатие клавиш"""
 		if event.key == pygame.K_RIGHT:
-			#переместить корабль вправо
+			# Переместить корабль вправо
 			self.ship.moving_right = True
 
 		elif event.key == pygame.K_LEFT:
@@ -133,6 +136,7 @@ class AlienInvasion():
 			# Выстрелить снарядом
 			self._fire_bullet()
 
+		# Выход из игры с помощью клавиши Q и запись рекорда
 		elif event.key == pygame.K_q:
 			with open('records.txt', 'w+', encoding = 'utf-8') as f:
 				print(self.stats.high_score, file=f)
@@ -141,44 +145,45 @@ class AlienInvasion():
 	def _check_keyup_events(self, event):
 		"""Реакция на отпускание клавиш"""
 		if event.key == pygame.K_RIGHT:
-			# не Переместить корабль вправо
+			# Остановка перемещения вправо
 			self.ship.moving_right = False
 
 		elif event.key == pygame.K_LEFT:
-			# не Переместить корабль влево
+			# Остановка перемещения влево
 			self.ship.moving_left = False
 
 		elif event.key == pygame.K_UP:
-			# не Переместить корабль вверх
+			# Остановка перемещения вверх
 			self.ship.moving_up = False
 
 		elif event.key == pygame.K_DOWN:
-			# не Переместить корабль вниз
+			# Остановка перемещения вниз
 			self.ship.moving_down = False
 
 	def _fire_bullet(self):
-		"""Создание группы пуль"""
+		"""Создание новой пули"""
 		new_bullet = Bullet(self)
 
+		# Добавление новой пули, если можно выстрелить ещё одну
 		if len(self.bullets) < self.settings.bullets_allowed:
 			self.bullets.add(new_bullet)
 
 	def _create_fleet(self):
 		"""Создание флота вторжения"""
-		# Создание пришельца и вычисление их кол-ва в ряду
 
+		# Создание пришельца и вычисление их кол-ва в ряду
 		alien = Alien(self)
 		alien_width, alien_height = alien.rect.size
 		available_space_x = self.settings.screen_width - (2 * alien_width)
 		number_aliens_x = available_space_x // (2 * alien_width)
 
-		"""Определяет кол-во рядов, помещающихся на экране"""
+		# Определение кол-во рядов, помещающихся на экране
 		ship_height = self.ship.rect.height
 		available_space_y = (self.settings.screen_height - 
 								(3 * alien_height) - ship_height)
-		number_rows = available_space_y // (4 * alien_height) #для уменьшения количества рядов 4
+		number_rows = available_space_y // (4 * alien_height)
 
-		# Создание флота пришельцев
+		# Создание флота пришельцев в соответствии с вычисленными настройками
 		for row_number in range(number_rows):
 			for alien_number in range(number_aliens_x):
 				self._create_alien(alien_number, row_number)
@@ -195,34 +200,40 @@ class AlienInvasion():
 
 	def _check_fleet_edges(self):
 		"""Реакция на толчок в край экрана"""
+
 		for alien in self.aliens.sprites():
 			if alien.check_edges():
 				self.change_fleet_direction()
 				break
 
 	def change_fleet_direction(self):
-		"""Опускает весь флот и меняет направление"""
+		"""Перемещение всего флота вниз и смена направления движения"""
+
 		for alien in self.aliens.sprites():
 			alien.rect.y += self.settings.fleet_drop_speed
 		self.settings.fleet_direction *= -1
 
 	def _update_screen(self):
-		# При каждом проходе перерисовывается экран
-		self.screen.fill(self.bg_color) # Цвет
-		self.ship.blitme() # Корабль
+		"""Обновление экрана: прорисовка"""
 
+		# Задание цвета экрана и обновление корабля
+		self.screen.fill(self.bg_color)
+		self.ship.blitme()
+
+
+		# Отрисовка всех пуль в спрайте
 		for bullet in self.bullets.sprites():
-			bullet.draw_bullet() # Прохожу по всем пулям и рисую
+			bullet.draw_bullet()
 
+		# Отрисовка всех пришельцев в одну строку, т.к. они через картинку рисуются, а не вручную
 		self.aliens.draw(self.screen)
 
+		# Отображение всей игровой информации: количество жизней, уровень, текущий счет и рекорд
 		self.sb.show_score()
 
-		#Кнопка Play отображается в том случае, если игра неактивна
+		# Кнопка Play отображается в том случае, если игра неактивна
 		if not self.stats.game_active:
-			#self.play_button.draw_button()
-
-			self.play_button.draw_button()
+				self.play_button.draw_button()
 
 		# Отображение последнего отрисованного экрана
 		pygame.display.flip()
@@ -239,8 +250,7 @@ class AlienInvasion():
 		
 	def _check_bullet_alien_collisions(self):
 		"""Обработка коллизий снарядов с пришельцами"""
-		# проверка попаданий в пришельцев
-		# при поражении удалить снаряд и пришельца
+		# Проверка столкновения пуль и пришельцев, при поражении удаление и снаряда, и пришельца
 		collisions = pygame.sprite.groupcollide(
 			self.bullets, self.aliens, True, True)
 		"""ключ значение тру1 это удаление снаряда, 
@@ -254,25 +264,23 @@ class AlienInvasion():
 
 		if not self.aliens:
 			#Уничтожение существующих снарядов и создание нового флота
-			self.bullets.empty() #существующие снаряды убираются
-
-			#loot boxes
-
+			self.bullets.empty()
 			self._create_fleet()
 			self.settings.increase_speed()
 
-			#увеличение уровня
+			# Увеличение уровня
 			self.stats.level += 1
 			self.sb.prep_level()
 
 	def _ship_hit(self):
 		"""Обрабатывает столкновение корабля с пришельцем"""
-		# Уменьшение _ship_left
+
+		# Уменьшение количества жизней
 		if self.stats.ships_left > 0:
 			self.stats.ships_left -= 1
 			self.sb.prep_ships()
 
-			# Очистка списков пришельцев и снарядов
+			# Очистка спрайтов пришельцев и снарядов
 			self.aliens.empty()
 			self.bullets.empty()
 
@@ -283,21 +291,25 @@ class AlienInvasion():
 			# Пауза
 			sleep(0.5)
 
+		# При утрате последней жизни игра останавливается и появляется курсор
 		else:
 			self.stats.game_active = False
 			pygame.mouse.set_visible(True)
 
 	def _check_aliens_bottom(self):
 		"""Проверяет, добрались ли пришельцы до нижнего края экрана"""
+
 		screen_rect = self.screen.get_rect()
 		for alien in self.aliens.sprites():
 			if alien.rect.bottom >= screen_rect.bottom:
+
 				# Происходит то же, что при столкновении с кораблем
 				self._ship_hit()
 
 	def _update_aliens(self):
 		"""Обновляет позиции всех пришельцев во флоте 
 		с учетом достижения края экрана"""
+
 		self._check_fleet_edges()
 		self.aliens.update()
 
@@ -309,6 +321,7 @@ class AlienInvasion():
 
 
 if __name__ == '__main__':
-	# Создание экземпляра и запуск игры
+
+	# Создание экземпляра игры и запуск
 	ai = AlienInvasion()
 	ai.run_game()

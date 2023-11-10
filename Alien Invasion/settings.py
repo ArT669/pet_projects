@@ -1,32 +1,32 @@
 
 class Settings():
 	"""Класс для хранения всех настроек игры Alien Invasion"""
-	#параметры экрана
+
 	def __init__(self):
 		"""Инициализация статистических настроек игры"""
-		#настройки экрана
+		# Настройки экрана
 		self.screen_width = 1200
 		self.screen_height = 800
 		self.bg_color = (230, 230, 230)
 
-		#настройки корабля
+		# Настройки корабля
 		self.ship_speed = 1.5
 		self.ship_limit = 3
 
-		#настройки пулей
+		# Настройки пулей
 		self.bullet_speed = 1
 		self.bullet_width = 3000
 		self.bullet_height = 15
 		self.bullet_color = (60, 60, 60)
 		self.bullets_allowed = 3
 
-		#настройки пришельцев
+		# Настройки пришельцев
 		self.alien_speed = 0.5 #x
 		self.fleet_drop_speed = 10 #y
 		
-		#темп ускорения игры
+		# Темп ускорения игры с увеличением уровня
 		self.speedup_scale = 1.1
-		# темп роста стоимости пришельцев
+		# Темп роста стоимости пришельцев с увеличением уровня
 		self.score_scale = 1.5
 
 		self.initialize_dynamic_settings()
@@ -38,7 +38,7 @@ class Settings():
 		self.alien_speed_factor = 1.0
 		self.fleet_direction = 1
 
-		#подсчет очков
+		# Начальная стоимость пришельца
 		self.alien_points = 50
 
 	def increase_speed(self):

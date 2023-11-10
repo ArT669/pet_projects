@@ -34,7 +34,7 @@ class Scoreboard():
 		self.score_rect.top = 20
 
 	def prep_high_score(self):
-		"""-и-и-и- рекордный"""
+		"""Преобразует текущий рекордный счет в изображение"""
 		high_score = round(self.stats.high_score, -1)
 		high_score_str = "{:,}".format(high_score)
 		self.high_score_image = self.font.render(high_score_str, True,
@@ -46,12 +46,12 @@ class Scoreboard():
 		self.high_score_rect.top = self.score_rect.top
 
 	def prep_level(self):
-		"""-и-и-и- уровень"""
+		"""Преобразует текущий уровень в изображение"""
 		level_str = str(self.stats.level)
 		self.level_image = self.font.render(level_str, True,
 			self.text_color, self.settings.bg_color)
 
-		#уровень выводится под текущим счетом
+		# Уровень выводится под текущим счетом
 		self.level_rect = self.level_image.get_rect()
 		self.level_rect.right = self.score_rect.right
 		self.level_rect.top = self.score_rect.bottom + 10
@@ -66,7 +66,7 @@ class Scoreboard():
 			self.ships.add(ship)
 
 	def check_high_score(self):
-		"""проверка рекорда"""
+		""" Проверка разницы между рекордом и текущим счетом"""
 		if self.stats.score > self.stats.high_score:
 			self.stats.high_score = self.stats.score
 			self.prep_high_score()
