@@ -28,7 +28,7 @@ from scoreboard import Scoreboard
 class AlienInvasion():
 	
 	def __init__(self):
-		"""Инициализация настроек из pygame:запуск pygame"""
+		"""Инициализация настроек из pygame: запуск pygame"""
 
 		pygame.init()
 
