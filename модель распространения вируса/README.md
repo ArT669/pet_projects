@@ -2,7 +2,8 @@
 
 Использованные библиотеки:
 
-![](https://img.shields.io/badge/random-grey?style=flat-square) ![](https://img.shields.io/badge/matplotlib-blue?style=flat-square&logo=matplotlib) ![]()
+![](https://img.shields.io/badge/random-grey?style=flat-square) ![](https://img.shields.io/badge/matplotlib-blue?style=flat-square&logo=matplotlib) ![](https://img.shields.io/badge/numpy-grey?style=flat-square&logo=numpy&logoColor=white)
+
 
     	random (для расчета вероятности заражения)
     	matplotlib [pyplot, colors] (визуализация)
