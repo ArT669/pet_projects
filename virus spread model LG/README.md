@@ -1,4 +1,6 @@
-# Модель распространения вируса.
+# Virus spread model LG
+
+<img src="https://media.giphy.com/media/dVuyBgq2z5gVBkFtDc/giphy.gif" width = 150/>
 
 Использованные библиотеки:
 
