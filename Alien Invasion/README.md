@@ -1,6 +1,7 @@
 Использованные библиотеки:
 
 ![](https://img.shields.io/badge/pygame-blue?style=flat-square) ![](https://img.shields.io/badge/time-green?style=flat-square) 
+
 Проект из книги Python Crash Course. Основная тема этого проекта - **Объектно-Ориентированное Программирование.**
 
  ***
